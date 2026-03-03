@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Holi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#fafafa;
+  color:#222;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Intro */
+.intro{
+  position:fixed;
+  inset:0;
+  background:#fafafa;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  animation:introFade 2.2s ease forwards;
+}
+
+.intro-text{
+  font-family:'Playfair Display',serif;
+  font-size:28px;
+  opacity:0;
+  animation:textFade 1.5s ease forwards;
+}
+
+@keyframes textFade{to{opacity:1;}}
+@keyframes introFade{
+  0%{opacity:1;}
+  85%{opacity:1;}
+  100%{opacity:0;visibility:hidden;}
+}
+
+/* Grain */
+.grain{
+  position:fixed;
+  inset:0;
+  background-image:url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+  opacity:0.08;
+  pointer-events:none;
+  z-index:1;
+}
+
+/* Parallax blobs */
+.blob{
+  position:fixed;
+  width:650px;
+  height:650px;
+  border-radius:50%;
+  filter:blur(160px);
+  opacity:0.55;
+  z-index:0;
+  transition:transform 0.1s linear;
+}
+
+.blob1{ background:#ff4da6; top:-250px; left:-250px; }
+.blob2{ background:#ffd84d; bottom:-250px; right:-250px; }
+.blob3{ background:#6ecbff; bottom:200px; left:300px; }
+
+/* Section */
+section{
+  position:relative;
+  z-index:2;
+  min-height:120vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:120px 20px;
+  max-width:800px;
+  margin:auto;
+  opacity:0;
+  transform:translateY(60px);
+  transition:all 1.4s cubic-bezier(0.22,1,0.36,1);
+}
+
+section.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+h1{
+  font-family:'Playfair Display',serif;
+  font-size:42px;
+  line-height:1.4;
+}
+
+.sub{
+  margin-top:25px;
+  font-size:17px;
+  color:#555;
+  max-width:600px;
+}
+
+.message{
+  margin-top:60px;
+  font-size:19px;
+  line-height:1.9;
+  color:#444;
+  max-width:650px;
+}
+
+.final-line{
+  margin-top:90px;
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  letter-spacing:1px;
+}
+
+/* Splash */
+.splash{
+  position:absolute;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  pointer-events:none;
+  animation:splashAnim 1s forwards;
+}
+
+@keyframes splashAnim{
+  from{transform:scale(0.2);opacity:0.8;}
+  to{transform:scale(3);opacity:0;}
+}
+
+/* Button */
+.music{
+  position:fixed;
+  bottom:30px;
+  right:30px;
+  padding:14px 22px;
+  border-radius:40px;
+  border:none;
+  cursor:pointer;
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(14px);
+  font-size:14px;
+  transition:all 0.4s ease;
+  z-index:3;
+}
+
+.music:hover{
+  background:rgba(255,255,255,0.95);
+  transform:translateY(-4px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="intro">
+  <div class="intro-text">Happy Holi ✨</div>
+</div>
+
+<div class="grain"></div>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<section>
+  <h1>Happy Holi to the one who brings color into my calm days.</h1>
+
+  <div class="sub">
+    Some colors don’t shout.  
+    They stay — and quietly make everything brighter.
+  </div>
+
+  <div class="message">
+    Maybe this Holi brings something new.<br><br>
+    Not something loud.<br>
+    Not something rushed.<br><br>
+    Just a little more understanding.<br>
+    A little more courage.<br>
+    A little more clarity.<br><br>
+    And if nothing changes,<br>
+    I’m still grateful for what already exists.
+  </div>
+
+  <div class="final-line">
+    Whatever this becomes — I’m glad it’s you.
+  </div>
+</section>
+
+<button class="music" onclick="toggleMusic()">🌬 Ambient</button>
+
+<audio id="bgMusic" loop>
+  <source src="holi.mp3" type="audio/mp3">
+</audio>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
+  });
+},{threshold:0.2});
+
+document.querySelectorAll("section").forEach(sec=>{
+  observer.observe(sec);
+});
+
+// Parallax effect
+const blobs = document.querySelectorAll(".blob");
+window.addEventListener("scroll",()=>{
+  let scrollY = window.scrollY;
+  blobs[0].style.transform = `translateY(${scrollY * 0.1}px)`;
+  blobs[1].style.transform = `translateY(${scrollY * -0.08}px)`;
+  blobs[2].style.transform = `translateY(${scrollY * 0.05}px)`;
+});
+
+// Splash
+document.addEventListener("click",function(e){
+  const colors=["#ff4da6","#ffd84d","#6ecbff","#c77dff"];
+  const splash=document.createElement("div");
+  splash.className="splash";
+  splash.style.background=colors[Math.floor(Math.random()*colors.length)];
+  splash.style.left=e.pageX-80+"px";
+  splash.style.top=e.pageY-80+"px";
+  document.body.appendChild(splash);
+  setTimeout(()=>splash.remove(),1000);
+});
+
+// Ambient fade-in
+const music=document.getElementById("bgMusic");
+function toggleMusic(){
+  if(music.paused){
+    music.volume = 0;
+    music.play();
+    let fade = setInterval(()=>{
+      if(music.volume < 0.5){
+        music.volume += 0.02;
+      } else{
+        clearInterval(fade);
+      }
+    },200);
+  } else{
+    music.pause();
+  }
+}
+</script>
+
+</body>
+</html>
